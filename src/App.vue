@@ -24,7 +24,11 @@ import VueFeather from 'vue-feather'
   </header>
 
   <main>
-    <RouterView />
+    <Suspense>
+      <RouterView />
+
+      <template #fallback> Loadinggggggggggg.............. </template>
+    </Suspense>
   </main>
 </template>
 

@@ -1,4 +1,13 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { newsList } from '@/composables/useNewsStore'
+
+async function fetchNews() {
+  const response = await fetch('https://run.mocky.io/v3/f2c3bd3a-06a4-4297-876d-f470bb8760b3')
+
+  return response.json()
+}
+newsList.value = await fetchNews()
+</script>
 
 <template>
   <div>
