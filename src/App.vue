@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import VueFeather from 'vue-feather'
-
-// const
 </script>
 
 <template>

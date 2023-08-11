@@ -1,12 +1,21 @@
 <script setup lang="ts">
-import { newsList } from '@/composables/useNewsStore'
+import { useNews } from '@/composables/useNewsStore'
+import type { article } from '@/types'
+import { computed, ref } from 'vue'
 
-async function fetchNews() {
-  const response = await fetch('https://run.mocky.io/v3/f2c3bd3a-06a4-4297-876d-f470bb8760b3')
+const { fetchNews, newsList, getPopularNews } = useNews()
 
-  return response.json()
-}
-newsList.value = await fetchNews()
+// const latestNews = ref<article[]>([])
+
+fetchNews()
+
+const latestNews = computed(() => {
+  return newsList.value.slice(0, 4)
+})
+
+const popularNews = getPopularNews
+
+console.log(popularNews, 'bvvvv')
 </script>
 
 <template>
@@ -15,17 +24,55 @@ newsList.value = await fetchNews()
       <h2>Latest</h2>
     </section>
 
-    <section>
+    <section v-if="latestNews.length > 0">
       <div class="card-highlight">
-        <div class="content"></div>
-        <div class="img"></div>
+        <div class="content">
+          <span>{{ latestNews[0].category }}</span>
+          <h3>{{ latestNews[0].title }}</h3>
+          <span>{{ latestNews[0].author.name }}</span>
+          <p>{{ latestNews[0].story_content.slice(0, 300) }} ...</p>
+        </div>
+        <div class="img">
+          <img src="https://picsum.photos/300" />
+        </div>
       </div>
+
       <div class="card-grid">
-        <div>! card</div>
-        <div>! card</div>
-        <div>! card</div>
+        <div v-for="article in latestNews.slice(1)" :key="`article-${article._id}`">
+          <router-link to="`/articles/${article._id}`">
+            <div class="block">
+              <img src="https://picsum.photos/300" />
+            </div>
+            <div>
+              <span class="block">{{ article.category }}</span>
+              <h3 class="block">{{ article.title }}</h3>
+              <span class="block">{{ article.author.name }}</span>
+              <p class="block">{{ article.excerpt }} ...</p>
+            </div>
+          </router-link>
+        </div>
       </div>
     </section>
+
+    <section class="section-header">
+      <h2>Popular</h2>
+    </section>
+
+    <div class="card-grid">
+      <div v-for="article in popularNews" :key="`article-${article._id}`">
+        <router-link to="`/articles/${article._id}`">
+          <div class="block">
+            <img src="https://picsum.photos/300" />
+          </div>
+          <div>
+            <span class="block">{{ article.category }}</span>
+            <h3 class="block">{{ article.title }}</h3>
+            <span class="block">{{ article.author.name }}</span>
+            <p class="block">{{ article.excerpt }} ...</p>
+          </div>
+        </router-link>
+      </div>
+    </div>
   </div>
 </template>
 
