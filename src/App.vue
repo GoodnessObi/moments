@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import VueFeather from 'vue-feather'
+import { categoryList } from '@/constants'
 </script>
 
 <template>
@@ -11,7 +12,14 @@ import VueFeather from 'vue-feather'
       <div class="navbar">
         <nav class="navbar-links">
           <RouterLink to="/" activeClass="active">Home</RouterLink>
-          <RouterLink to="/articles/all" activeClass="active">Articles</RouterLink>
+
+          <RouterLink
+            v-for="category in categoryList"
+            :key="category"
+            :to="`/categories/${category}`"
+            activeClass="active"
+            >{{ category }}</RouterLink
+          >
           <RouterLink to="/about" activeClass="active">About</RouterLink>
         </nav>
         <button class="btn-icon">
@@ -55,7 +63,7 @@ header {
 
 .navbar-links {
   display: flex;
-  width: 50%;
+  width: 90%;
   justify-content: space-between;
   align-items: center;
 }
